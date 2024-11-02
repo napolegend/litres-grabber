@@ -1,5 +1,8 @@
 # litres-grabber
 
+## Работу сделал
+### Шигалугов Мурат Бесланович 468089 U3110
+
 # Установка софта
 ```
 git clone https://github.com/napolegend/litres-grabber; cd litres-grabber; python3 -m pip install -r requirements.txt
