@@ -1,4 +1,6 @@
-# Получение изображений страниц
+"""
+Модуль скачивания книги в виде набора изображений формата gif и jpg
+"""
 import os
 
 from selenium import webdriver
@@ -15,8 +17,10 @@ import time
 kb = Controller()
 
 
-# Ждем, пока пользователь закроет окно браузера
 def check_close(driver):
+    """
+    Проверка закрытия окна браузера при завершении работы модуля
+    """
     closed = False
     s = driver.title
     while not closed:
@@ -27,8 +31,11 @@ def check_close(driver):
             closed = True
 
 
-# Создаем клиент браузера
+
 def create_driver():
+    """
+    Создаем клиент программно-управляемого браузера
+    """
     chrome_options = Options()
     chrome_options.add_argument("--disable-extensions")
     chrome_service = Service(ChromeDriverManager().install())
@@ -36,8 +43,11 @@ def create_driver():
     return driver
 
 
-# Эмулируем нажатие ctrl(cmd) + s на странице с одной картинкой
+
 def load_bl_this(path):
+    """
+    Эмулируем нажатие человеком shortcut для сохранения страницы книги
+    """
     # Для MacOS
     if os.uname().sysname == "Darwin":
         kb.press(Key.cmd_l)
@@ -51,35 +61,36 @@ def load_bl_this(path):
         kb.release(Key.ctrl_l)
         kb.release("s")
     time.sleep(0.35)
-    # Вписываем номер страницы
+    
     kb.type(path)
     time.sleep(0.67)
     kb.press(Key.enter)
 
 
-# Запускает страницу входа в аккаунт Литрес
 def login_litres(driver):
+    """
+    Запуск страницы логина
+    """
     driver.get(URL_LOGIN)
     time.sleep(18)
 
 
-# Переключает страницы и заходит конкретно в изображение
 def load_books(driver, book_id, width, pages):
-    path = "0"
-    print("Обработка страницы №0")
     """
+    Переключает страницы и заходит конкретно в изображение
     Картинки хранятся и в GIF и в JPG
     Первые для текста и малокрасочных страниц, а вторыми в основном оформлены Схемы и обложка
     Так как гифок больше имеет смысл сначала пробовать зайти на гиф страницу
-    """
-    driver.get(URL_BOOKS.format(0, "gif", book_id, width))
-    """
+    
     Так как самая первая страница требует больше времени на загрузку, 
     выносим загрузку первой страницы в отдельный элемент и ставим везде задержку в 18 секунд,
     а также даем время пользователю нажать CTRL(CMD) + S и сохранить первую страницу в определенную 
     директорию вручную, чтобы потом при нажатии эмулятором этих кнопок директория сохранения оставалась
     той же (чтобы не сохранять все в папку Загрузки)
     """
+    path = "0"
+    print("Обработка страницы №0")
+    driver.get(URL_BOOKS.format(0, "gif", book_id, width))
     try:
         # Смотрим есть ли на странице сообщение об отсутствии такой страницы
         err = driver.find_element(By.CLASS_NAME, "error_block__caption")
@@ -110,6 +121,9 @@ def load_books(driver, book_id, width, pages):
 
 
 def litres_loads(book_id, width, pages):
+    """
+    Отсюда начинается выполнение модуля, сначала логин потом остальное
+    """
     driver = create_driver()
     driver.maximize_window()
     login_litres(driver)
