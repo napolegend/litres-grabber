@@ -1,10 +1,14 @@
-# Файл запуска
+"""
+Файл запуска программы
+"""
 import grabber
 import pdf_creator
 
 
-# Запускаем загрузку изображений
 def image_load_starter():
+    """
+    Эта функция вызывает модуль скачивания книги постранично
+    """
     # ID Книги в системе Литрес
     book_id = input("ID КНИГИ: ")
     pages = int(input("Скольно страниц в книге: "))
@@ -15,9 +19,10 @@ def image_load_starter():
     grabber.litres_loads(book_id, width, pages)
 
 
-# Запускаем создание pdf
 def pdf_create_starter():
-    # Нужно удалить файл Без названия
+    """
+    Эта функция вызывает модуль преобразования кучи изображений в единый pdf файл
+    """
     dir_path = input("Введите путь к папке с изображениями: ")
     if dir_path[-1] == "/":
         dir_path = dir_path[:-1]
