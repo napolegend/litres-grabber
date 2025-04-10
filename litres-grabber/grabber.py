@@ -43,13 +43,18 @@ def create_driver():
     return driver
 
 
-
+is_mac = False
+try:
+    if os.uname().sysname == "Darwin":
+       is_mac = True
+except Exception:
+    pass
 def load_bl_this(path):
     """
     Эмулируем нажатие человеком shortcut для сохранения страницы книги
     """
     # Для MacOS
-    if os.uname().sysname == "Darwin":
+    if is_mac:
         kb.press(Key.cmd_l)
         kb.press("s")
         kb.release(Key.cmd_l)
